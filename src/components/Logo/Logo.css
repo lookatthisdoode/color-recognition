@@ -1,0 +1,10 @@
+.Tilt {
+	background-color: darkgray;
+	width: 200px;
+	height: 200px;
+	display: flex;
+  	justify-content: center;
+  	align-items: center;
+	color: #939231;
+	border-radius: 5000px;
+}
