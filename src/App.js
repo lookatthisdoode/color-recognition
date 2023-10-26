@@ -1,15 +1,8 @@
 import { React, Component } from 'react'
 import './App.css'
-import Navigation from './components/Navigation/Navigation'
 import ImageLinkForm from './components/ImageLinkForm/ImageLinkForm'
-import Rank from './components/Rank/Rank'
 import Logo from './components/Logo/Logo'
 import FaceRecognition from './components/FaceRecognition/FaceRecognition'
-//import ParticlesBg from 'particles-bg'
-
-
-
-
 
 const requestOptions = (imgUrl) => {
   const PAT = '3555f4c5b75a41a58af10ca2a876be0f'
@@ -18,39 +11,36 @@ const requestOptions = (imgUrl) => {
   const IMAGE_URL = imgUrl
 
   const raw = JSON.stringify({
-      "user_app_id": {
-          "user_id": USER_ID,
-          "app_id": APP_ID
+    user_app_id: {
+      user_id: USER_ID,
+      app_id: APP_ID,
+    },
+    inputs: [
+      {
+        data: {
+          image: {
+            url: IMAGE_URL,
+          },
+        },
       },
-      "inputs": [
-          {
-              "data": {
-                  "image": {
-                      "url": IMAGE_URL
-                  }
-              }
-          }
-      ]
+    ],
   })
 
   const requestOptions = {
-      method: 'POST',
-      headers: {
-          'Accept': 'application/json',
-          'Authorization': 'Key ' + PAT
-      },
-      body: raw
+    method: 'POST',
+    headers: {
+      Accept: 'application/json',
+      Authorization: 'Key ' + PAT,
+    },
+    body: raw,
   }
-    
+
   return requestOptions
 }
 
-
-
-
 class App extends Component {
   constructor() {
-    super();
+    super()
     this.state = {
       input: '',
       faces: [],
@@ -62,16 +52,20 @@ class App extends Component {
     this.setState({ input: event.target.value, colors: [] })
   }
 
-
   onButtonSubmit = () => {
-    fetch("https://api.clarifai.com/v2/models/color-recognition/outputs", requestOptions(this.state.input))
-      .then(result => result.json())
-      .then(data => {
+    fetch(
+      'https://api.clarifai.com/v2/models/color-recognition/outputs',
+      requestOptions(this.state.input)
+    )
+      .then((result) => result.json())
+      .then((data) => {
         console.log('req sent')
-        let newColorsArray = data.outputs[0].data.colors.map(color => {
+        let newColorsArray = data.outputs[0].data.colors.map((color) => {
           return color.raw_hex
-          })
+        })
         this.setState({ colors: newColorsArray })
+
+        // previously this were detecting faces on the picture, for that probably need to change link to model
 
         /*let newFacesArray = data.outputs[0].data.regions.map(face => {
           let box = face.region_info.bounding_box
@@ -94,18 +88,20 @@ class App extends Component {
 
   render() {
     return (
-    <div className="App helvetica">
-      {/*<ParticlesBg color="#6495ED" type="polygon" bg={true} />*/}
-      <Navigation />
-      <Logo />
-      <Rank />
-      <ImageLinkForm 
-        onInputChange={this.onInputChange} 
-        onButtonSubmit={this.onButtonSubmit}/>
-      <FaceRecognition image={this.state.input} faces={this.state.faces} colors={this.state.colors}/>
-    </div>
-  )}
+      <div className='App helvetica'>
+        <Logo />
+        <ImageLinkForm
+          onInputChange={this.onInputChange}
+          onButtonSubmit={this.onButtonSubmit}
+        />
+        <FaceRecognition
+          image={this.state.input}
+          faces={this.state.faces}
+          colors={this.state.colors}
+        />
+      </div>
+    )
+  }
 }
 
-
-export default App;
+export default App
