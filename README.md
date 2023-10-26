@@ -8,5 +8,5 @@ In the project directory, you can run:
 
 This will start the app in localhost
 
-Dont forget to run npm install for scripts to be installed
+## Dont forget to run npm install for scripts to be installed
 
